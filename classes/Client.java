@@ -8,7 +8,7 @@ class Client{
             
             // send to server
             PrintWriter out = new PrintWriter(
-                socket..getOutputStream(), true
+                socket.getOutputStream(), true
             );
 
             //get from server
