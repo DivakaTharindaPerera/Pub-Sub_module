@@ -4,7 +4,7 @@ import java.util.*;
 
 class Client{
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 6000)){
+        try (Socket socket = new Socket("localhost", 5000)){
             
             // send to server
             PrintWriter out = new PrintWriter(
@@ -18,7 +18,7 @@ class Client{
             Scanner sc = new Scanner(System.in);
             String line = null;
 
-            while(! "exit".equalsIgnoreCase(line)){
+            while(! "terminate".equalsIgnoreCase(line)){
                 //reading from server
                 line = sc.nextLine();
 
