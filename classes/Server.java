@@ -28,14 +28,14 @@ public class Server{
     }
 
     public static void main(String[] args) {
-//        TODO: Uncomment this part to get command line args
-//        if (args.length != 1) {
-//            System.out.println("Usage: java ServerExample <portNumber>");
-//            return;
-//        }
 
-//        int portNumber = Integer.parseInt(args[0]);
-        int portNumber = 5000;
+        if (args.length != 1) {
+            System.out.println("Usage: java ServerExample <portNumber>");
+            return;
+        }
+
+        int portNumber = Integer.parseInt(args[0]);
+//        int portNumber = 5000;
 
         try {
             ServerSocket serverSocket = new ServerSocket(portNumber);
@@ -59,6 +59,7 @@ class ServerThread extends Thread {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+    private String type = null;
 
     public ServerThread(Socket clientSocket) {
         System.out.println("Server thread is initiating");
@@ -79,6 +80,9 @@ class ServerThread extends Thread {
         String inputLine;
         try {
             while ((inputLine = this.in.readLine()) != null) {
+                if(this.type == null) {
+                    this.type = inputLine;
+                }
                 System.out.println("Received from client: " + inputLine);
                 out.println("Server received: " + inputLine);
 
