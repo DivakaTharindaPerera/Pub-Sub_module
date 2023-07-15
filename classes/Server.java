@@ -89,10 +89,6 @@ public class Server{
                     while((inputLine = this.messageList.getNextMessage(this.head)) != null) {
                         this.head++;
                         out.println("Message from publisher: " + inputLine);
-                        if("terminate".equalsIgnoreCase(inputLine)) {
-                            System.out.println("Client is disconnecting");
-                            break;
-                        }
                     }
                 }
 
