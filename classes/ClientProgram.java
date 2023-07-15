@@ -4,7 +4,7 @@ public class ClientProgram {
         Client client;
 //        Getting command line args
         if (args.length != 2) {
-            System.out.println("Usage: java ServerExample <portNumber> <type>");
+            System.out.println("Usage: java ClientProgram <portNumber> <type>");
             return;
         }
 
@@ -20,8 +20,7 @@ public class ClientProgram {
             client = new Client(portNumber, "SUBSCRIBER");
             client.start();
         }else {
-            System.out.println("Usage: java ServerExample <portNumber> <type>");
-            return;
+            System.out.println("Usage: java ClientProgram <portNumber> <type>");
         }
     }
 }
