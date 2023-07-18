@@ -86,10 +86,12 @@ public class Server{
                     this.type = arguments[0];
                     this.topic = arguments[1];
 
+                    // check whether the requested topic is available
                     if(isAvailable(this.topic)) {
                         insertNewTopic(this.topic);
                     }
 
+                    // assign messagelist to the client
                     this.messageList = getMessageList(this.topic);
                 }
 
