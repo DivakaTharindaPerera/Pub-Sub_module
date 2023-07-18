@@ -17,7 +17,7 @@ public class ServerProgram {
             server.start();
 
         } catch(Exception e) {
-            System.out.println("Error: port Number should be a integer between 1024 and 49151");
+            System.out.println("Error: port Number should be an integer between 1024 and 49151");
         }
     }
 }
