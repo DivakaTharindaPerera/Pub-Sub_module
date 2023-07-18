@@ -5,9 +5,19 @@ public class ServerProgram {
             return;
         }
 
-        int portNumber = Integer.parseInt(args[0]);
+        try {
+            int portNumber = Integer.parseInt(args[0]);
 
-        Server server = new Server(portNumber);
-        server.start();
+            if(portNumber<1024 || portNumber > 49151) {
+                System.out.println("Error: port number should be between 1024 and 49151");
+                return;
+            }
+
+            Server server = new Server(portNumber);
+            server.start();
+
+        } catch(Exception e) {
+            System.out.println("Error: port Number should be a integer between 1024 and 49151");
+        }
     }
 }
