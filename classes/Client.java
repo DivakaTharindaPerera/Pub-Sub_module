@@ -5,12 +5,14 @@ import java.util.*;
 class Client{
     private int port;
     private String type;
+    private String topic;
     protected BufferedReader in;
     protected PrintWriter out;
     protected Scanner sc;
-    public Client(int port, String type) {
+    public Client(int port, String type,String topic) {
         this.port = port;
         this.type = type;
+        this.topic = topic;
     }
 
     public void start() {
@@ -26,7 +28,7 @@ class Client{
             //object of scanner class
             this.sc = new Scanner(System.in);
             //Initial handshake
-            this.out.println(this.type);
+            this.out.println(this.type + " " + this.topic);
             this.out.flush();
             //display server reply
             System.out.println("Reply from server: " + this.in.readLine());
