@@ -7,29 +7,45 @@ import java.util.*;
 public class Server{
 
     private final int port;
-    private MessageList messageList;
+    // hashmap to store message lists according to topic 
+    private HashMap<String,MessageList> messagePool;
 
     public Server(int port) {
         this.port = port;
-        this.messageList = new MessageList();
+        this.messagePool = new HashMap<String,MessageList>();
     }
 
     public void start() {
         try {
-            ServerSocket serverSocket = new ServerSocket(this.port);
-            System.out.println("Server is listening on port " + this.port);
+            try (ServerSocket serverSocket = new ServerSocket(this.port)) {
+                System.out.println("Server is listening on port " + this.port);
 
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket.getInetAddress());
+                while (true) {
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("Client connected: " + clientSocket.getInetAddress());
+                    Thread serverThread = new ServerThread(clientSocket);
+                    serverThread.start();
 
-                Thread serverThread = new ServerThread(clientSocket, this.messageList);
-                serverThread.start();
-
+                }
             }
         } catch (IOException e) {
             System.out.println("Error occurred: " + e.getMessage());
         }
+    }
+
+    // get message list relevant to topic from message pool
+    private MessageList getMessageList(String key) {
+        return this.messagePool.get(key);
+    }
+
+    // check whether the topic is available
+    private boolean isAvailable(String topic) {
+        return this.messagePool.get(topic) == null;
+    }
+
+    // initialize new messagelist for new topic
+    private void insertNewTopic(String key) {
+        this.messagePool.put(key, new MessageList());
     }
 
     class ServerThread extends Thread {
@@ -38,12 +54,13 @@ public class Server{
         private BufferedReader in;
         private MessageList messageList;
         private String type = null;
+        private String topic = null;
         int head;
 
-        public ServerThread(Socket clientSocket, MessageList messageList) {
+        public ServerThread(Socket clientSocket) {
             System.out.println("Server thread is initiating");
             this.clientSocket = clientSocket;
-            this.messageList = messageList;
+            this.messageList = null;
             this.head = 0;
 
             try {
@@ -63,9 +80,17 @@ public class Server{
 
 //                Capture the initial message where client introduces itself
                 while (this.type == null && (inputLine = this.in.readLine()) != null) {
-                    System.out.println("Client found: " + inputLine);
-                    out.println("Hello " + inputLine);
-                    this.type = inputLine;
+                    String[] arguments = inputLine.split(" ");
+                    System.out.println("Client found: " + arguments[0]);
+                    out.println("Hello " + arguments[0]);
+                    this.type = arguments[0];
+                    this.topic = arguments[1];
+
+                    if(isAvailable(this.topic)) {
+                        insertNewTopic(this.topic);
+                    }
+
+                    this.messageList = getMessageList(this.topic);
                 }
 
 //                If client is a PUBLISHER,
@@ -85,7 +110,6 @@ public class Server{
 
 //                    Otherwise, client is a subscriber
                 }else {
-
                     while((inputLine = this.messageList.getNextMessage(this.head)) != null) {
                         this.head++;
                         out.println("Message from publisher: " + inputLine);
@@ -123,6 +147,10 @@ class MessageList {
             wait();
         }
         return this.messageList.get(position);
+    }
+
+    public synchronized void printMessages() {
+        System.out.println(this.messageList);
     }
 
 }
