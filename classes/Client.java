@@ -49,6 +49,17 @@ class Client{
                 System.out.println("Client Listener listing");
                 while(true) {
                     try {
+                        if((line = sc.nextLine()) != null) {
+                            out.println(line);
+                            out.flush();
+
+                            if("TERMINATE".equalsIgnoreCase(line)) {
+                                System.out.println("Client subscriber is quiting.....");
+                                break;
+                            }
+                            System.out.println("Warning: invalid command. To exit, type 'TERMINATE' ");
+                            continue;
+                        }
                         if((line = this.in.readLine()) != null) {
                             System.out.println(line);
 
