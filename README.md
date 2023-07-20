@@ -1,7 +1,7 @@
 # Pub-Sub_module
 publication subscription module for middleware architecture
 
-contributore:
+contributors:
   1. Neethamadhu
   2. Sineth
   3. Divaka
