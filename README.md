@@ -6,4 +6,4 @@ contributors:
   2. Sineth
   3. Divaka
   4. Izzath
-  5. Rushda
+  5. Rushdha
