@@ -3,20 +3,30 @@ import java.net.*;
 import java.util.*;
 
 class Client{
+    // Defining the ip address which server is running
+    InetAddress ip;
     private int port;
     private String type;
     private String topic;
     protected BufferedReader in;
     protected PrintWriter out;
     protected Scanner sc;
-    public Client(int port, String type,String topic) {
+    public Client(String ipAddress, int port, String type,String topic) {
         this.port = port;
+        try {
+            this.ip = InetAddress.getByName(ipAddress);
+        }  catch (IOException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
         this.type = type;
         this.topic = topic;
     }
 
     public void start() {
-        try (Socket socket = new Socket("localhost", this.port)){
+        SocketAddress sktAddress = new InetSocketAddress(this.ip, this.port);
+        try (Socket socket = new Socket()){
+
+            socket.connect(sktAddress, 30000);
             // send to server
             this.out = new PrintWriter(
                     socket.getOutputStream(), true

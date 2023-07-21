@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-// import java.util.*;
 
 
 public class Server{
@@ -10,22 +9,30 @@ public class Server{
     // hashmap to store message lists according to topic 
     private HashMap<String,MessageList> messagePool;
 
-    public Server(int port) {
+    // Defining ip address
+    private InetAddress ip;
+
+    public Server(String ipAddress, int port) {
         this.port = port;
+        try {
+            this.ip = InetAddress.getByName(ipAddress);
+        } catch (IOException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
         this.messagePool = new HashMap<String,MessageList>();
     }
 
     public void start() {
         try {
             try (ServerSocket serverSocket = new ServerSocket(this.port)) {
-                System.out.println("Server is listening on port " + this.port);
+                serverSocket.setSoTimeout(40000);
+                System.out.println("Server is listening on url " + this.ip.getHostAddress() + ":" + this.port);
 
                 while (true) {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Client connected: " + clientSocket.getInetAddress());
                     Thread serverThread = new ServerThread(clientSocket);
                     serverThread.start();
-
                 }
             }
         } catch (IOException e) {
