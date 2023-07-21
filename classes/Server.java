@@ -25,6 +25,7 @@ public class Server{
     public void start() {
         try {
             try (ServerSocket serverSocket = new ServerSocket(this.port)) {
+                serverSocket.setSoTimeout(40000);
                 System.out.println("Server is listening on url " + this.ip.getHostAddress() + ":" + this.port);
 
                 while (true) {
@@ -32,7 +33,6 @@ public class Server{
                     System.out.println("Client connected: " + clientSocket.getInetAddress());
                     Thread serverThread = new ServerThread(clientSocket);
                     serverThread.start();
-
                 }
             }
         } catch (IOException e) {
