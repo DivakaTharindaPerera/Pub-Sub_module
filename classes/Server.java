@@ -24,7 +24,7 @@ public class Server{
 
     public void start() {
         try {
-            try (ServerSocket serverSocket = new ServerSocket(this.port)) {
+            try (ServerSocket serverSocket = new ServerSocket(this.port, 50, this.ip)) {
                 serverSocket.setSoTimeout(40000);
                 System.out.println("Server is listening on url " + this.ip.getHostAddress() + ":" + this.port);
 
